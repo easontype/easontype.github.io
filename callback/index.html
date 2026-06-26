@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>Threads OAuth Callback</title>
+<style>
+  body { font-family: monospace; background: #0d1117; color: #c9d1d9; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+  .box { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 32px 40px; max-width: 700px; width: 90%; }
+  h2 { color: #58a6ff; margin-top: 0; }
+  .code-block { background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 16px; word-break: break-all; font-size: 13px; color: #7ee787; margin: 16px 0; }
+  button { background: #238636; color: #fff; border: none; border-radius: 6px; padding: 10px 20px; cursor: pointer; font-size: 14px; }
+  button:hover { background: #2ea043; }
+  .copied { background: #1f6feb !important; }
+  .error { color: #f85149; }
+  .label { color: #8b949e; font-size: 12px; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+<div class="box">
+  <h2>Threads OAuth Callback</h2>
+  <div id="content"></div>
+</div>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get('code');
+  const error = params.get('error');
+  const el = document.getElementById('content');
+
+  if (error) {
+    el.innerHTML = `<p class="error">授權失敗：${error}<br>${params.get('error_description') || ''}</p>`;
+  } else if (code) {
+    el.innerHTML = `
+      <p>授權成功！把下面的 code 貼回終端機：</p>
+      <div class="label">CODE</div>
+      <div class="code-block" id="code">${code}</div>
+      <button onclick="copy()">複製 Code</button>
+    `;
+  } else {
+    el.innerHTML = `<p class="error">沒有收到 code，請重新授權。</p>`;
+  }
+
+  function copy() {
+    navigator.clipboard.writeText(document.getElementById('code').textContent);
+    const btn = document.querySelector('button');
+    btn.textContent = '已複製！';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '複製 Code'; btn.classList.remove('copied'); }, 2000);
+  }
+</script>
+</body>
+</html>
