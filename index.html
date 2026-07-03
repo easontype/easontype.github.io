@@ -1,10 +1,169 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-<meta charset="UTF-8">
-<title>easontype</title>
-</head>
-<body>
-<p>Coming soon.</p>
-</body>
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Eason Type builds custom type, brand typography, and precise digital lettering systems for modern products."
+    />
+    <title>Eason Type | Custom Type and Brand Typography</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+TC:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header" data-header>
+      <a class="brand-mark" href="#top" aria-label="Eason Type home">
+        <span class="mark-grid" aria-hidden="true">Et</span>
+        <span>Eason Type</span>
+      </a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="#work">作品</a>
+        <a href="#services">服務</a>
+        <a href="#specimen">試排</a>
+        <a href="#contact">聯絡</a>
+      </nav>
+      <a class="header-action" href="mailto:hello@easontype.com">Start</a>
+    </header>
+
+    <main id="top">
+      <section class="hero section-band">
+        <div class="hero-copy">
+          <p class="eyebrow">TYPE DESIGN / BRAND SYSTEM / LETTERING</p>
+          <h1>Eason Type</h1>
+          <p class="hero-lede">
+            為品牌、產品介面與出版建立清楚、有記憶點、能長期使用的文字系統。
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#contact">預約討論</a>
+            <a class="button ghost" href="#work">看作品</a>
+          </div>
+        </div>
+
+        <div class="type-poster" aria-label="Typography specimen poster">
+          <div class="poster-row poster-row-top">
+            <span>Glyph</span>
+            <span>Grid</span>
+            <span>Kerning</span>
+          </div>
+          <div class="poster-stage">
+            <span class="poster-letter">Aa</span>
+            <span class="poster-letter alt">字</span>
+          </div>
+          <div class="poster-footer">
+            <span>Optical rhythm for screens and print</span>
+            <span>2026</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section intro">
+        <div>
+          <p class="eyebrow">What we shape</p>
+          <h2>字不只是風格。它會決定品牌被閱讀、被相信、被記住的方式。</h2>
+        </div>
+        <p>
+          Eason Type 專注在客製字體、品牌標準字、介面字體調校與多語系排版。從一個標誌字，到一套完整
+          UI 字體規格，我們讓文字在不同媒介裡保持一致的節奏與辨識度。
+        </p>
+      </section>
+
+      <section class="section work" id="work">
+        <div class="section-heading">
+          <p class="eyebrow">Selected directions</p>
+          <h2>可延展的字體方向</h2>
+        </div>
+        <div class="work-grid">
+          <article class="work-item">
+            <div class="work-sample sharp">NT</div>
+            <div>
+              <span class="tag">Brand Serif</span>
+              <h3>Editorial warmth</h3>
+              <p>適合文化、出版、生活風格品牌，保留手工感，同時維持螢幕閱讀穩定度。</p>
+            </div>
+          </article>
+          <article class="work-item">
+            <div class="work-sample mono">09</div>
+            <div>
+              <span class="tag">UI Sans</span>
+              <h3>Product clarity</h3>
+              <p>針對產品介面與儀表板調整字寬、數字、標點與小字級可讀性。</p>
+            </div>
+          </article>
+          <article class="work-item">
+            <div class="work-sample brush">東</div>
+            <div>
+              <span class="tag">Logotype</span>
+              <h3>Memorable marks</h3>
+              <p>從品牌策略出發設計標準字，建立能被延伸到包裝、社群和網站的字形語彙。</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section services" id="services">
+        <div class="section-heading">
+          <p class="eyebrow">Services</p>
+          <h2>從字形到系統</h2>
+        </div>
+        <div class="service-list">
+          <article>
+            <span>01</span>
+            <h3>Custom Type</h3>
+            <p>為品牌建立專屬西文、中文或多語系字體，包含字重、字寬、OpenType 功能與使用規格。</p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3>Brand Lettering</h3>
+            <p>設計標準字、活動標題字、產品命名與視覺主標，讓品牌第一眼有明確個性。</p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3>Typography Audit</h3>
+            <p>檢查現有品牌與產品文字系統，整理可讀性、階層、字距、數字與多語系問題。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section specimen" id="specimen">
+        <div class="specimen-panel">
+          <div class="specimen-controls">
+            <div>
+              <p class="eyebrow">Live specimen</p>
+              <h2>試排一句話</h2>
+            </div>
+            <label>
+              字級
+              <input type="range" min="46" max="132" value="86" data-size />
+            </label>
+          </div>
+          <textarea data-copy aria-label="Specimen text">Good type makes a brand speak before it says a word.</textarea>
+          <p class="specimen-output" data-output>Good type makes a brand speak before it says a word.</p>
+        </div>
+      </section>
+
+      <section class="section contact" id="contact">
+        <div>
+          <p class="eyebrow">Start a project</p>
+          <h2>如果你正在建立品牌、產品或出版計畫，先從文字的聲音開始。</h2>
+        </div>
+        <div class="contact-card">
+          <p>Tell us what you are making, what languages you need, and where the type will live.</p>
+          <a class="button primary" href="mailto:hello@easontype.com?subject=Project%20for%20Eason%20Type">hello@easontype.com</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>Eason Type</span>
+      <span>Custom type and brand typography</span>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
 </html>
