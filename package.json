@@ -1,0 +1,26 @@
+{
+  "name": "easontype.github.io",
+  "version": "0.1.0",
+  "description": "Personal blog",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/easontype/easontype.github.io.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/easontype/easontype.github.io/issues"
+  },
+  "homepage": "https://github.com/easontype/easontype.github.io#readme",
+  "dependencies": {
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.3",
+    "astro": "^5.18.2"
+  }
+}

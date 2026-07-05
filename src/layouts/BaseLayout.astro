@@ -1,0 +1,98 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  noindex?: boolean;
+}
+
+const { title, description, noindex = false } = Astro.props;
+const siteName = "AI貓實驗室"; // placeholder：正式品牌名稱待定，之後在 /ds-full 品牌階段確定
+---
+
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <title>{title} | {siteName}</title>
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/rss+xml" title={siteName} href="/rss.xml" />
+    <style is:global>
+      :root {
+        color-scheme: dark;
+        --bg: #05070d;
+        --ink: #e8f1ff;
+        --muted: #8a97ad;
+        --accent: #3fb6ff;
+        --line: #1c2433;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: system-ui, "IBM Plex Sans TC", sans-serif;
+        line-height: 1.6;
+      }
+
+      a {
+        color: var(--accent);
+      }
+
+      main {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 24px clamp(16px, 5vw, 32px) 80px;
+      }
+
+      .site-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 24px clamp(16px, 5vw, 32px);
+        border-bottom: 1px solid var(--line);
+      }
+
+      .site-nav {
+        display: flex;
+        gap: 20px;
+        font-size: 14px;
+      }
+
+      .site-footer {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 24px clamp(16px, 5vw, 32px);
+        color: var(--muted);
+        font-size: 13px;
+        border-top: 1px solid var(--line);
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <a href="/" style="color: var(--ink); font-weight: 700; text-decoration: none;">{siteName}</a>
+      <nav class="site-nav">
+        <a href="/blog">文章</a>
+        <a href="/projects">作品</a>
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <span>{siteName} — 這是架構階段的暫時樣式，正式視覺設計待定</span>
+    </footer>
+  </body>
+</html>
