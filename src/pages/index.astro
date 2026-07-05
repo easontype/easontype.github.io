@@ -8,29 +8,86 @@ const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
 const latest = posts.slice(0, 5);
 ---
 
-<BaseLayout title="首頁" description="個人部落格：AI 工具、自動化心得與技術筆記。">
-  <section>
-    <h1>Eason</h1>
-    <p>
-      這裡記錄 AI 工具、自動化實驗與一些技術筆記，也會連到我做的其他作品。
+<style>
+  .hero {
+    padding: 56px 0 48px;
+  }
+
+  .hero h1 {
+    font-size: clamp(40px, 7vw, 60px);
+  }
+
+  .section {
+    padding: 40px 0;
+    border-top: 1px solid var(--hairline);
+  }
+
+  .section h2 {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--steel);
+    margin-bottom: 20px;
+  }
+
+  .post-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 16px;
+  }
+
+  .post-list li {
+    display: flex;
+    gap: 16px;
+    align-items: baseline;
+  }
+
+  .post-list time {
+    flex-shrink: 0;
+  }
+
+  .empty {
+    color: var(--steel);
+    font-style: italic;
+  }
+</style>
+
+<BaseLayout title="首頁" description="記錄 AI 工具、自動化實驗與一些技術筆記。">
+  <section class="hero">
+    <h1>AI八爪貓</h1>
+    <p class="lede">
+      記錄 AI 工具、自動化實驗與一些技術筆記，順便把手上做的作品串在一起。
     </p>
   </section>
 
-  <section>
+  <section class="section">
     <h2>最新文章</h2>
     {
       latest.length === 0 ? (
-        <p>還沒有文章，敬請期待。</p>
+        <p class="empty">還沒有文章，敬請期待。</p>
       ) : (
-        <ul>
+        <ul class="post-list">
           {latest.map((post) => (
             <li>
-              <a href={`/blog/${post.id}/`}>{post.data.title}</a>
+              <time datetime={post.data.pubDate.toISOString()}>
+                {post.data.pubDate.toISOString().slice(0, 10)}
+              </time>
+              <a class="link-glow" href={`/blog/${post.id}/`}>{post.data.title}</a>
             </li>
           ))}
         </ul>
       )
     }
-    <p><a href="/blog">看全部文章 →</a></p>
+  </section>
+
+  <section class="section">
+    <h2>作品</h2>
+    <p class="lede">
+      也做了一些工具和實驗性專案。<a class="link-glow" href="/projects">看看做過的東西 →</a>
+    </p>
   </section>
 </BaseLayout>

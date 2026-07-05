@@ -6,7 +6,7 @@ interface Props {
 }
 
 const { title, description, noindex = false } = Astro.props;
-const siteName = "AI貓實驗室"; // placeholder：正式品牌名稱待定，之後在 /ds-full 品牌階段確定
+const siteName = "AI八爪貓";
 ---
 
 <!doctype html>
@@ -22,67 +22,163 @@ const siteName = "AI貓實驗室"; // placeholder：正式品牌名稱待定，�
     <title>{title} | {siteName}</title>
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="alternate" type="application/rss+xml" title={siteName} href="/rss.xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans+TC:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
     <style is:global>
       :root {
         color-scheme: dark;
-        --bg: #05070d;
-        --ink: #e8f1ff;
-        --muted: #8a97ad;
-        --accent: #3fb6ff;
-        --line: #1c2433;
+        --canvas: #050608;
+        --surface: #0d1117;
+        --ink: #eef4fb;
+        --slate: #8a97ad;
+        --steel: #5b6576;
+        --hairline: #1c2433;
+        --primary: #2ea3e6;
+        --on-primary: #04070a;
+        --accent: #8fe8ff;
+
+        --font-display: "Space Grotesk", "IBM Plex Sans TC", sans-serif;
+        --font-sans: "IBM Plex Sans TC", system-ui, sans-serif;
+        --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+        --shadow-subtle: 0 0 4px rgba(46, 163, 230, 0.3), 0 0 12px rgba(46, 163, 230, 0.25);
+        --shadow-medium: 0 0 8px rgba(46, 163, 230, 0.45), 0 0 20px rgba(46, 163, 230, 0.35);
+
+        --measure: 640px;
       }
 
       * {
         box-sizing: border-box;
       }
 
+      html {
+        scroll-behavior: smooth;
+      }
+
       body {
         margin: 0;
-        background: var(--bg);
+        background: var(--canvas);
         color: var(--ink);
-        font-family: system-ui, "IBM Plex Sans TC", sans-serif;
+        font-family: var(--font-sans);
+        font-size: 16px;
         line-height: 1.6;
       }
 
       a {
-        color: var(--accent);
+        color: var(--ink);
+        text-decoration: none;
       }
 
-      main {
-        max-width: 720px;
-        margin: 0 auto;
-        padding: 24px clamp(16px, 5vw, 32px) 80px;
+      h1, h2, h3 {
+        font-family: var(--font-display);
+        font-weight: 600;
+        line-height: 1.2;
+        margin: 0 0 0.5em;
       }
 
       .site-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        max-width: 720px;
+        max-width: var(--measure);
         margin: 0 auto;
-        padding: 24px clamp(16px, 5vw, 32px);
-        border-bottom: 1px solid var(--line);
+        padding: 28px clamp(20px, 5vw, 32px);
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 16px;
+        color: var(--ink);
+      }
+
+      .brand-node {
+        position: relative;
+        width: 18px;
+        height: 18px;
+        border: 1px solid var(--primary);
+        border-radius: 50%;
+      }
+
+      .brand-node::after {
+        content: "";
+        position: absolute;
+        inset: 6px;
+        border-radius: 50%;
+        background: var(--accent);
+        box-shadow: var(--shadow-subtle);
       }
 
       .site-nav {
         display: flex;
-        gap: 20px;
-        font-size: 14px;
+        gap: 24px;
+        font-family: var(--font-mono);
+        font-size: 13px;
+        color: var(--slate);
+      }
+
+      .site-nav a {
+        color: var(--slate);
+        transition: color 160ms ease;
+      }
+
+      .site-nav a:hover {
+        color: var(--accent);
+      }
+
+      main {
+        max-width: var(--measure);
+        margin: 0 auto;
+        padding: 8px clamp(20px, 5vw, 32px) 96px;
+      }
+
+      .lede {
+        color: var(--slate);
+        font-size: 17px;
+        max-width: 34em;
+      }
+
+      .link-glow {
+        color: var(--primary);
+        border-bottom: 1px solid transparent;
+        transition: color 160ms ease, border-color 160ms ease;
+      }
+
+      .link-glow:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+      }
+
+      time {
+        font-family: var(--font-mono);
+        font-size: 13px;
+        color: var(--steel);
       }
 
       .site-footer {
-        max-width: 720px;
+        max-width: var(--measure);
         margin: 0 auto;
-        padding: 24px clamp(16px, 5vw, 32px);
-        color: var(--muted);
-        font-size: 13px;
-        border-top: 1px solid var(--line);
+        padding: 32px clamp(20px, 5vw, 32px) 48px;
+        border-top: 1px solid var(--hairline);
+        color: var(--steel);
+        font-family: var(--font-mono);
+        font-size: 12px;
       }
     </style>
   </head>
   <body>
     <header class="site-header">
-      <a href="/" style="color: var(--ink); font-weight: 700; text-decoration: none;">{siteName}</a>
+      <a class="brand" href="/">
+        <span class="brand-node" aria-hidden="true"></span>
+        <span>{siteName}</span>
+      </a>
       <nav class="site-nav">
         <a href="/blog">文章</a>
         <a href="/projects">作品</a>
@@ -92,7 +188,7 @@ const siteName = "AI貓實驗室"; // placeholder：正式品牌名稱待定，�
       <slot />
     </main>
     <footer class="site-footer">
-      <span>{siteName} — 這是架構階段的暫時樣式，正式視覺設計待定</span>
+      <span>{siteName}</span>
     </footer>
   </body>
 </html>

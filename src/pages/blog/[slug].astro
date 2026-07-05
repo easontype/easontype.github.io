@@ -22,15 +22,113 @@ const jsonLd = {
 };
 ---
 
+<style>
+  .post-head {
+    padding: 48px 0 8px;
+  }
+
+  .post-head h1 {
+    font-size: clamp(28px, 4vw, 38px);
+    max-width: 20em;
+  }
+
+  .post-meta {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    background: var(--surface);
+    color: var(--accent);
+    border-radius: 4px;
+    padding: 2px 8px;
+  }
+
+  .prose {
+    padding-top: 24px;
+    line-height: 1.75;
+    font-size: 17px;
+  }
+
+  .prose :global(p) {
+    margin: 0 0 1.4em;
+  }
+
+  .prose :global(h2) {
+    font-size: 24px;
+    margin-top: 2em;
+  }
+
+  .prose :global(h3) {
+    font-size: 19px;
+    margin-top: 1.6em;
+  }
+
+  .prose :global(a) {
+    color: var(--primary);
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .prose :global(a:hover) {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .prose :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: var(--surface);
+    border-radius: 4px;
+    padding: 2px 6px;
+  }
+
+  .prose :global(pre) {
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    padding: 16px;
+    overflow-x: auto;
+  }
+
+  .prose :global(pre code) {
+    background: none;
+    padding: 0;
+  }
+
+  .prose :global(blockquote) {
+    margin: 0 0 1.4em;
+    padding-left: 16px;
+    border-left: 2px solid var(--hairline);
+    color: var(--slate);
+  }
+
+  .back {
+    display: inline-block;
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--hairline);
+  }
+</style>
+
 <BaseLayout title={post.data.title} description={post.data.description}>
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   <article>
-    <h1>{post.data.title}</h1>
-    <p>
-      <time datetime={post.data.pubDate.toISOString()}>
-        {post.data.pubDate.toISOString().slice(0, 10)}
-      </time>
-    </p>
-    <Content />
+    <div class="post-head">
+      <div class="post-meta">
+        <time datetime={post.data.pubDate.toISOString()}>
+          {post.data.pubDate.toISOString().slice(0, 10)}
+        </time>
+        {post.data.tags.map((tag) => <span class="tag">{tag}</span>)}
+      </div>
+      <h1>{post.data.title}</h1>
+    </div>
+    <div class="prose">
+      <Content />
+    </div>
+    <a class="back link-glow" href="/blog">← 回文章列表</a>
   </article>
 </BaseLayout>

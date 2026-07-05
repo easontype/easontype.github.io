@@ -33,16 +33,49 @@ const projects = [
 ];
 ---
 
+<style>
+  .page-head {
+    padding: 48px 0 32px;
+  }
+
+  .project-grid {
+    display: grid;
+    gap: 14px;
+  }
+
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    padding: 20px 24px;
+    box-shadow: var(--shadow-subtle);
+  }
+
+  .project-card h2 {
+    font-size: 17px;
+    margin-bottom: 6px;
+  }
+
+  .project-card p {
+    color: var(--slate);
+    margin: 0;
+    font-size: 15px;
+  }
+</style>
+
 <BaseLayout title="作品" description="我做的一些專案與作品。">
-  <h1>作品</h1>
-  <ul>
+  <div class="page-head">
+    <h1>作品</h1>
+    <p class="lede">手上正在跑或做過的一些工具與實驗。</p>
+  </div>
+  <div class="project-grid">
     {
       projects.map((project) => (
-        <li>
-          <strong>{project.name}</strong>
+        <article class="project-card">
+          <h2>{project.name}</h2>
           <p>{project.description}</p>
-        </li>
+        </article>
       ))
     }
-  </ul>
+  </div>
 </BaseLayout>
