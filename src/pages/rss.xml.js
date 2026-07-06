@@ -1,11 +1,12 @@
 import rss from "@astrojs/rss";
 import { getCollection } from "astro:content";
+import { site } from "../data/site";
 
 export async function GET(context) {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
   return rss({
-    title: "AI貓實驗室",
-    description: "AI 工具、自動化心得與技術筆記。",
+    title: site.name,
+    description: site.tagline,
     site: context.site,
     items: posts.map((post) => ({
       title: post.data.title,

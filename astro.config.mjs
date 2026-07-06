@@ -3,6 +3,11 @@ import sitemap from "@astrojs/sitemap";
 
 export default defineConfig({
   site: "https://easontype.github.io",
+  markdown: {
+    shikiConfig: {
+      theme: "github-light",
+    },
+  },
   integrations: [
     sitemap({
       filter: (page) => !page.includes("/callback"),

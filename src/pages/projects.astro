@@ -1,41 +1,15 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-
-const projects = [
-  {
-    name: "Social Drafts Dashboard",
-    description: "社群貼文草稿管理儀表板。",
-  },
-  {
-    name: "litereview",
-    description: "文獻搜尋、找重點、比較的研究輔助工具。",
-  },
-  {
-    name: "Lingua A8",
-    description: "全雙工語音學習 app。",
-  },
-  {
-    name: "Council",
-    description: "學術 AI 討論／辯論框架與論文閱讀工具。",
-  },
-  {
-    name: "Sports Betting ML",
-    description: "運動賽事預測的機器學習專案。",
-  },
-  {
-    name: "OctaBrain",
-    description: "社群智慧引擎：分析貼文、學習主理人口吻。",
-  },
-  {
-    name: "AI八爪貓 電子報",
-    description: "AI 工具與趨勢的中文電子報。",
-  },
-];
+import { projects } from "../data/projects";
 ---
 
 <style>
   .page-head {
     padding: 48px 0 32px;
+  }
+
+  .page-head h1 {
+    font-size: clamp(28px, 4vw, 36px);
   }
 
   .project-grid {
@@ -46,34 +20,63 @@ const projects = [
   .project-card {
     background: var(--surface);
     border: 1px solid var(--hairline);
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 20px 24px;
-    box-shadow: var(--shadow-subtle);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 4px 16px;
+    align-items: baseline;
+    transition: border-color 160ms ease;
+  }
+
+  .project-card:hover {
+    border-color: var(--primary-tint);
   }
 
   .project-card h2 {
     font-size: 17px;
-    margin-bottom: 6px;
+    margin: 0;
+  }
+
+  .project-card h2 a {
+    color: var(--ink);
+  }
+
+  .project-card h2 a:hover {
+    color: var(--primary);
   }
 
   .project-card p {
     color: var(--slate);
     margin: 0;
     font-size: 15px;
+    grid-column: 1;
+  }
+
+  .gh-link {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    grid-row: 1 / span 2;
+    grid-column: 2;
   }
 </style>
 
-<BaseLayout title="作品" description="我做的一些專案與作品。">
+<BaseLayout title="作品" description="AI八爪貓做過的工具與實驗專案，含 GitHub 原始碼連結。">
   <div class="page-head">
     <h1>作品</h1>
-    <p class="lede">手上正在跑或做過的一些工具與實驗。</p>
+    <p class="lede">手上正在跑或做過的一些工具與實驗。有公開原始碼的附 GitHub 連結。</p>
   </div>
   <div class="project-grid">
     {
       projects.map((project) => (
         <article class="project-card">
-          <h2>{project.name}</h2>
+          <h2>{project.href ? <a href={project.href}>{project.name}</a> : project.name}</h2>
           <p>{project.description}</p>
+          {project.href && (
+            <a class="gh-link text-link" href={project.href}>
+              GitHub ↗
+            </a>
+          )}
         </article>
       ))
     }

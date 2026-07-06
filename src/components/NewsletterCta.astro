@@ -1,0 +1,67 @@
+---
+// 電子報 CTA。variant="band"：滿版淺藍色帶（首頁）；variant="card"：邊框卡片（文章尾/關於頁）。
+import { site } from "../data/site";
+
+interface Props {
+  variant?: "band" | "card";
+}
+
+const { variant = "band" } = Astro.props;
+---
+
+<aside class={variant === "band" ? "nl-band" : "nl-card"}>
+  <div class="nl-inner">
+    <h2>AI八爪貓 電子報</h2>
+    <p>每週一封，連載中的 AI 教學書＋蓋系統的過程筆記。不灌水，隨時可退。</p>
+    <a class="nl-btn" href={site.newsletterUrl} target="_blank" rel="noopener">前往訂閱 →</a>
+  </div>
+</aside>
+
+<style>
+  .nl-band {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    background: var(--primary-soft);
+  }
+
+  .nl-band .nl-inner {
+    max-width: var(--measure);
+    margin: 0 auto;
+    padding: 48px clamp(20px, 5vw, 32px);
+  }
+
+  .nl-card {
+    border: 1px solid var(--primary-tint);
+    border-radius: 12px;
+    background: linear-gradient(180deg, var(--primary-soft), var(--canvas) 160%);
+    padding: 28px 32px;
+    margin: 40px 0 0;
+  }
+
+  h2 {
+    font-size: 22px;
+    margin: 0 0 8px;
+  }
+
+  p {
+    color: var(--slate);
+    font-size: 15px;
+    margin: 0 0 20px;
+    max-width: 32em;
+  }
+
+  .nl-btn {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 20px;
+    background: var(--primary);
+    color: var(--on-primary);
+    border-radius: 8px;
+    transition: background 160ms ease;
+  }
+
+  .nl-btn:hover {
+    background: var(--primary-pressed);
+  }
+</style>

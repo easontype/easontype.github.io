@@ -1,6 +1,8 @@
 ---
 import { getCollection, render } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import NewsletterCta from "../../components/NewsletterCta.astro";
+import { site } from "../../data/site";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
@@ -13,12 +15,21 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await render(post);
 
+const canonical = new URL(Astro.url.pathname, Astro.site);
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
   headline: post.data.title,
   description: post.data.description,
   datePublished: post.data.pubDate.toISOString(),
+  dateModified: post.data.pubDate.toISOString(),
+  mainEntityOfPage: canonical.toString(),
+  image: new URL("/og-default.png", Astro.site).toString(),
+  author: {
+    "@type": "Person",
+    name: site.name,
+    url: Astro.site?.toString(),
+  },
 };
 ---
 
@@ -34,18 +45,10 @@ const jsonLd = {
 
   .post-meta {
     display: flex;
-    gap: 12px;
+    gap: 8px;
     align-items: center;
-    margin-bottom: 8px;
-  }
-
-  .tag {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    background: var(--surface);
-    color: var(--accent);
-    border-radius: 4px;
-    padding: 2px 8px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
   }
 
   .prose {
@@ -70,20 +73,21 @@ const jsonLd = {
 
   .prose :global(a) {
     color: var(--primary);
-    border-bottom: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--primary-tint);
   }
 
   .prose :global(a:hover) {
-    color: var(--accent);
-    border-color: var(--accent);
+    color: var(--primary-pressed);
+    border-color: var(--primary);
   }
 
   .prose :global(code) {
     font-family: var(--font-mono);
     font-size: 0.9em;
     background: var(--surface);
+    border: 1px solid var(--hairline);
     border-radius: 4px;
-    padding: 2px 6px;
+    padding: 1px 6px;
   }
 
   .prose :global(pre) {
@@ -96,39 +100,50 @@ const jsonLd = {
 
   .prose :global(pre code) {
     background: none;
+    border: none;
     padding: 0;
   }
 
   .prose :global(blockquote) {
     margin: 0 0 1.4em;
     padding-left: 16px;
-    border-left: 2px solid var(--hairline);
+    border-left: 3px solid var(--primary-tint);
     color: var(--slate);
+  }
+
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin: 0 0 1.4em;
+    padding-left: 1.4em;
+  }
+
+  .prose :global(img) {
+    max-width: 100%;
+    border-radius: 8px;
   }
 
   .back {
     display: inline-block;
     margin-top: 40px;
-    padding-top: 24px;
-    border-top: 1px solid var(--hairline);
   }
 </style>
 
-<BaseLayout title={post.data.title} description={post.data.description}>
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+<BaseLayout title={post.data.title} description={post.data.description} ogType="article">
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   <article>
     <div class="post-head">
       <div class="post-meta">
         <time datetime={post.data.pubDate.toISOString()}>
           {post.data.pubDate.toISOString().slice(0, 10)}
         </time>
-        {post.data.tags.map((tag) => <span class="tag">{tag}</span>)}
+        {post.data.tags.map((tag) => <span class="tag-chip">{tag}</span>)}
       </div>
       <h1>{post.data.title}</h1>
     </div>
     <div class="prose">
       <Content />
     </div>
-    <a class="back link-glow" href="/blog">← 回文章列表</a>
+    <NewsletterCta variant="card" />
+    <a class="back text-link" href="/blog">← 回文章列表</a>
   </article>
 </BaseLayout>

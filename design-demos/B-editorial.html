@@ -1,0 +1,235 @@
+<!doctype html>
+<!--
+  變體 B · 編輯檯（editorial）
+  Assumptions:
+  - 色票/字型照 REDESIGN-PLAN 拍板值，個性濃度中等
+  - 引入 surface 卡片（作品區）與 primary-soft 色帶（電子報 CTA），版面節奏像獨立刊物
+  - 文章列表帶一行摘要，資訊密度比 A 高一級
+  - 文章標題/摘要為示意佔位，正式內容待 Phase 4
+-->
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>變體 B · 編輯檯 — AI八爪貓</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans+TC:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    color-scheme: light;
+    --canvas: #ffffff;
+    --surface: #f6f8fb;
+    --surface-soft: #fbfcfe;
+    --primary-soft: #e7f2fb;
+    --primary-tint: #cfe6f8;
+    --ink: #14202e;
+    --slate: #47566a;
+    --steel: #737f92;
+    --hairline: #e6ebf2;
+    --hairline-strong: #d2dae5;
+    --primary: #1668b0;
+    --primary-pressed: #0f4f88;
+    --on-primary: #ffffff;
+    --font-display: "Space Grotesk", "IBM Plex Sans TC", sans-serif;
+    --font-sans: "IBM Plex Sans TC", system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--canvas); color: var(--ink);
+    font-family: var(--font-sans); font-size: 16px; line-height: 1.7;
+  }
+  a { color: var(--primary); text-decoration: none; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 32px); }
+
+  header.site {
+    border-bottom: 1px solid var(--hairline);
+  }
+  header.site .wrap {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 20px; padding-bottom: 20px;
+  }
+  .brand {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--font-display); font-weight: 700; font-size: 17px; color: var(--ink);
+  }
+  .brand-mark {
+    width: 20px; height: 20px; border-radius: 50%;
+    border: 1.5px solid var(--primary); position: relative;
+  }
+  .brand-mark::after {
+    content: ""; position: absolute; inset: 6px; border-radius: 50%;
+    background: var(--primary);
+  }
+  nav.site { display: flex; gap: 22px; font-size: 14px; }
+  nav.site a { color: var(--slate); padding: 4px 0; }
+  nav.site a.active { color: var(--primary); font-weight: 600; box-shadow: 0 2px 0 var(--primary); }
+  nav.site a:hover { color: var(--primary); }
+
+  .hero { padding: 64px 0 48px; }
+  .kicker {
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--primary); margin: 0 0 14px;
+  }
+  .hero h1 {
+    font-family: var(--font-display); font-size: clamp(36px, 6vw, 52px);
+    line-height: 1.12; margin: 0 0 16px; letter-spacing: -0.015em;
+  }
+  .hero p { color: var(--slate); font-size: 17px; max-width: 32em; margin: 0; }
+
+  section { padding: 40px 0; }
+  .section-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    border-top: 1px solid var(--hairline); padding-top: 20px; margin-bottom: 24px;
+  }
+  .section-head h2 {
+    font-family: var(--font-display); font-size: 20px; margin: 0;
+  }
+  .section-head a { font-size: 14px; }
+  .section-head a:hover { color: var(--primary-pressed); }
+
+  ul.posts { list-style: none; margin: 0; padding: 0; display: grid; gap: 26px; }
+  ul.posts li { display: grid; grid-template-columns: 96px 1fr; gap: 18px; }
+  ul.posts time { font-family: var(--font-mono); font-size: 13px; color: var(--steel); padding-top: 3px; }
+  ul.posts .t { font-weight: 600; font-size: 16px; }
+  ul.posts .t a { color: var(--ink); }
+  ul.posts .t a:hover { color: var(--primary); }
+  ul.posts .d { color: var(--slate); font-size: 14px; margin-top: 2px; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--hairline);
+    border-radius: 10px; padding: 18px 18px 16px; display: grid; gap: 6px;
+    transition: border-color 160ms ease;
+  }
+  .card:hover { border-color: var(--primary-tint); }
+  .card .name { font-family: var(--font-display); font-weight: 600; font-size: 16px; }
+  .card .name a { color: var(--ink); }
+  .card .name a:hover { color: var(--primary); }
+  .card .desc { color: var(--slate); font-size: 14px; line-height: 1.6; }
+
+  .newsletter { background: var(--primary-soft); margin-top: 24px; }
+  .newsletter .wrap { padding-top: 48px; padding-bottom: 48px; }
+  .newsletter h2 { font-family: var(--font-display); font-size: 24px; margin: 0 0 8px; }
+  .newsletter p { color: var(--slate); font-size: 15px; margin: 0 0 20px; max-width: 32em; }
+  .newsletter form { display: flex; gap: 10px; max-width: 440px; }
+  .newsletter input {
+    flex: 1; font: inherit; font-size: 14px; padding: 11px 12px;
+    border: 1px solid var(--hairline-strong); border-radius: 8px;
+    background: var(--canvas); color: var(--ink);
+  }
+  .newsletter input::placeholder { color: var(--steel); }
+  .newsletter button {
+    font: inherit; font-size: 14px; font-weight: 600; padding: 11px 20px;
+    background: var(--primary); color: var(--on-primary);
+    border: none; border-radius: 8px; cursor: pointer;
+  }
+  .newsletter button:hover { background: var(--primary-pressed); }
+  .newsletter .note { font-family: var(--font-mono); font-size: 12px; color: var(--steel); margin-top: 12px; }
+
+  footer.site { border-top: 1px solid var(--hairline); }
+  footer.site .wrap {
+    padding-top: 28px; padding-bottom: 48px;
+    display: flex; justify-content: space-between; font-size: 13px; color: var(--steel);
+  }
+  footer.site .links { display: flex; gap: 16px; }
+  footer.site a { color: var(--steel); }
+  footer.site a:hover { color: var(--primary); }
+</style>
+</head>
+<body>
+  <header class="site">
+    <div class="wrap">
+      <a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span>AI八爪貓</a>
+      <nav class="site">
+        <a href="/blog">文章</a>
+        <a href="/projects">作品</a>
+        <a href="/about">關於</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="hero">
+      <p class="kicker">AI Tools · Automation · Build in Public</p>
+      <h1>記錄 AI 工具、自動化實驗，與一些技術筆記。</h1>
+      <p>我是 AI八爪貓。一邊唸研究所，一邊用 Claude 和各種 agent 蓋工具，把踩過的雷和學到的事寫下來。</p>
+    </div>
+
+    <section>
+      <div class="section-head">
+        <h2>最新文章</h2>
+        <a href="/blog">全部文章 →</a>
+      </div>
+      <ul class="posts">
+        <li>
+          <time>2026-07-02</time>
+          <div>
+            <div class="t"><a href="#">讓 Claude 幫你讀 50 篇論文：litereview 開發筆記</a></div>
+            <div class="d">從「論文太多讀不完」到自己蓋一個文獻比較工具，中間做錯的三個決定。</div>
+          </div>
+        </li>
+        <li>
+          <time>2026-06-24</time>
+          <div>
+            <div class="t"><a href="#">Threads API 申請踩雷全紀錄</a></div>
+            <div class="d">申請流程沒有文件寫清楚的部分，一次補齊：權限、token、發文兩步驟。</div>
+          </div>
+        </li>
+        <li>
+          <time>2026-06-15</time>
+          <div>
+            <div class="t"><a href="#">用 n8n 把 AI 新聞快訊變成半自動流水線</a></div>
+            <div class="d">四個 workflow，從抓新聞、評分到 Telegram 一鍵出稿。</div>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2>精選作品</h2>
+        <a href="/projects">全部作品 →</a>
+      </div>
+      <div class="cards">
+        <div class="card">
+          <span class="name"><a href="#">litereview</a></span>
+          <span class="desc">文獻搜尋、找重點、比較的研究輔助工具。</span>
+        </div>
+        <div class="card">
+          <span class="name"><a href="#">Council</a></span>
+          <span class="desc">學術 AI 討論／辯論框架與論文閱讀工具。</span>
+        </div>
+        <div class="card">
+          <span class="name"><a href="#">Lingua A8</a></span>
+          <span class="desc">全雙工語音學習 app。</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="newsletter">
+    <div class="wrap">
+      <h2>AI八爪貓 電子報</h2>
+      <p>每週一封，連載中的 AI 教學書＋蓋系統的過程筆記。不灌水，隨時可退。</p>
+      <form>
+        <input type="email" placeholder="你的 email" />
+        <button type="button">訂閱</button>
+      </form>
+      <p class="note">// 每週一發刊 · 已連載 3 期</p>
+    </div>
+  </div>
+
+  <footer class="site">
+    <div class="wrap">
+      <span>© 2026 AI八爪貓</span>
+      <span class="links">
+        <a href="#">GitHub</a>
+        <a href="#">Threads</a>
+        <a href="#">RSS</a>
+      </span>
+    </div>
+  </footer>
+</body>
+</html>

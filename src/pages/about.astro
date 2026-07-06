@@ -1,0 +1,114 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import NewsletterCta from "../components/NewsletterCta.astro";
+import { site } from "../data/site";
+import { projects } from "../data/projects";
+
+const featured = projects.filter((p) => p.featured);
+---
+
+<style>
+  .page-head {
+    padding: 48px 0 8px;
+  }
+
+  .page-head h1 {
+    font-size: clamp(28px, 4vw, 36px);
+  }
+
+  .intro {
+    font-size: 17px;
+    line-height: 1.75;
+    max-width: 36em;
+  }
+
+  .intro p {
+    margin: 0 0 1.3em;
+  }
+
+  .section {
+    padding: 36px 0 0;
+  }
+
+  .now-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 14px;
+  }
+
+  .now-list li {
+    display: grid;
+    gap: 2px;
+  }
+
+  .now-list .name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 16px;
+  }
+
+  .now-list .name a {
+    color: var(--ink);
+  }
+
+  .now-list .name a:hover {
+    color: var(--primary);
+  }
+
+  .now-list .desc {
+    color: var(--slate);
+    font-size: 14px;
+  }
+
+  .contact {
+    display: flex;
+    gap: 16px;
+    font-size: 14px;
+  }
+</style>
+
+<BaseLayout title="關於" description="關於 AI八爪貓：研究所在讀，一邊用 Claude 和各種 agent 蓋工具，一邊把過程寫下來。">
+  <div class="page-head">
+    <h1>關於</h1>
+  </div>
+
+  <div class="intro">
+    <!-- TODO(使用者): 以下自介為草稿，請改成你自己的話。 -->
+    <p>
+      嗨，我是 AI八爪貓。研究所在讀，主業唸書，副業把各種「應該可以自動化吧」的念頭做成真的工具。
+    </p>
+    <p>
+      這個站記錄我用 Claude 和各種 agent 蓋東西的過程：做對的決定、做錯的決定、和那些文件沒寫但你一定會踩到的雷。
+      每蓋一個系統，就寫一篇文章——這是我對自己的規則。
+    </p>
+  </div>
+
+  <section class="section">
+    <h2 class="section-label">最近在做</h2>
+    <ul class="now-list">
+      {
+        featured.map((project) => (
+          <li>
+            <span class="name">
+              {project.href ? <a href={project.href}>{project.name}</a> : project.name}
+            </span>
+            <span class="desc">{project.description}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="section">
+    <h2 class="section-label">聯絡</h2>
+    <div class="contact">
+      <a class="text-link" href={site.githubUrl}>GitHub</a>
+      {site.threadsUrl && <a class="text-link" href={site.threadsUrl}>Threads</a>}
+      <a class="text-link" href="/rss.xml">RSS</a>
+    </div>
+  </section>
+
+  <NewsletterCta variant="card" />
+</BaseLayout>

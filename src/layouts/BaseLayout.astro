@@ -1,12 +1,36 @@
 ---
+import { site } from "../data/site";
+
 interface Props {
   title: string;
   description: string;
   noindex?: boolean;
+  ogType?: "website" | "article";
+  ogImage?: string;
 }
 
-const { title, description, noindex = false } = Astro.props;
-const siteName = "AI八爪貓";
+const {
+  title,
+  description,
+  noindex = false,
+  ogType = "website",
+  ogImage = "/og-default.png",
+} = Astro.props;
+
+const siteName = site.name;
+const pageTitle = title === siteName ? `${siteName}｜${site.tagline}` : `${title} | ${siteName}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImageUrl = new URL(ogImage, Astro.site);
+const path = Astro.url.pathname;
+const isActive = (prefix: string) => path === prefix || path.startsWith(`${prefix}/`);
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: siteName,
+  description: site.tagline,
+  url: Astro.site?.toString(),
+};
 ---
 
 <!doctype html>
@@ -16,10 +40,19 @@ const siteName = "AI八爪貓";
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex,nofollow" />}
-    <meta property="og:title" content={title} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
-    <title>{title} | {siteName}</title>
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:locale" content="zh_TW" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+    <title>{pageTitle}</title>
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="alternate" type="application/rss+xml" title={siteName} href="/rss.xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -28,27 +61,40 @@ const siteName = "AI八爪貓";
       href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans+TC:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
+    <script type="application/ld+json" set:html={JSON.stringify(websiteJsonLd)} />
+    <slot name="head" />
+    {
+      site.goatcounterCode && (
+        <script
+          data-goatcounter={`https://${site.goatcounterCode}.goatcounter.com/count`}
+          async
+          src="//gc.zgo.at/count.js"
+        />
+      )
+    }
     <style is:global>
       :root {
-        color-scheme: dark;
-        --canvas: #050608;
-        --surface: #0d1117;
-        --ink: #eef4fb;
-        --slate: #8a97ad;
-        --steel: #5b6576;
-        --hairline: #1c2433;
-        --primary: #2ea3e6;
-        --on-primary: #04070a;
-        --accent: #8fe8ff;
+        color-scheme: light;
+        --canvas: #ffffff;
+        --surface: #f6f8fb;
+        --surface-soft: #fbfcfe;
+        --primary-soft: #e7f2fb;
+        --primary-tint: #cfe6f8;
+        --ink: #14202e;
+        --slate: #47566a;
+        --steel: #737f92;
+        --hairline: #e6ebf2;
+        --hairline-strong: #d2dae5;
+        --primary: #1668b0;
+        --primary-pressed: #0f4f88;
+        --on-primary: #ffffff;
+        --accent: #2ea3e6;
 
         --font-display: "Space Grotesk", "IBM Plex Sans TC", sans-serif;
         --font-sans: "IBM Plex Sans TC", system-ui, sans-serif;
         --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
-        --shadow-subtle: 0 0 4px rgba(46, 163, 230, 0.3), 0 0 12px rgba(46, 163, 230, 0.25);
-        --shadow-medium: 0 0 8px rgba(46, 163, 230, 0.45), 0 0 20px rgba(46, 163, 230, 0.35);
-
-        --measure: 640px;
+        --measure: 720px;
       }
 
       * {
@@ -65,15 +111,18 @@ const siteName = "AI八爪貓";
         color: var(--ink);
         font-family: var(--font-sans);
         font-size: 16px;
-        line-height: 1.6;
+        line-height: 1.7;
+        overflow-x: hidden;
       }
 
       a {
-        color: var(--ink);
+        color: var(--primary);
         text-decoration: none;
       }
 
-      h1, h2, h3 {
+      h1,
+      h2,
+      h3 {
         font-family: var(--font-display);
         font-weight: 600;
         line-height: 1.2;
@@ -81,12 +130,16 @@ const siteName = "AI八爪貓";
       }
 
       .site-header {
+        border-bottom: 1px solid var(--hairline);
+      }
+
+      .site-header-inner {
         display: flex;
         justify-content: space-between;
         align-items: center;
         max-width: var(--measure);
         margin: 0 auto;
-        padding: 28px clamp(20px, 5vw, 32px);
+        padding: 20px clamp(20px, 5vw, 32px);
       }
 
       .brand {
@@ -95,48 +148,43 @@ const siteName = "AI八爪貓";
         gap: 10px;
         font-family: var(--font-display);
         font-weight: 700;
-        font-size: 16px;
+        font-size: 17px;
         color: var(--ink);
       }
 
-      .brand-node {
-        position: relative;
-        width: 18px;
-        height: 18px;
-        border: 1px solid var(--primary);
-        border-radius: 50%;
-      }
-
-      .brand-node::after {
-        content: "";
-        position: absolute;
-        inset: 6px;
-        border-radius: 50%;
-        background: var(--accent);
-        box-shadow: var(--shadow-subtle);
+      .brand svg {
+        width: 22px;
+        height: 22px;
+        display: block;
       }
 
       .site-nav {
         display: flex;
-        gap: 24px;
-        font-family: var(--font-mono);
-        font-size: 13px;
-        color: var(--slate);
+        gap: 22px;
+        font-size: 14px;
       }
 
       .site-nav a {
         color: var(--slate);
+        padding: 4px 0 2px;
+        border-bottom: 2px solid transparent;
         transition: color 160ms ease;
       }
 
       .site-nav a:hover {
-        color: var(--accent);
+        color: var(--primary);
+      }
+
+      .site-nav a.active {
+        color: var(--primary);
+        font-weight: 600;
+        border-bottom-color: var(--accent);
       }
 
       main {
         max-width: var(--measure);
         margin: 0 auto;
-        padding: 8px clamp(20px, 5vw, 32px) 96px;
+        padding: 8px clamp(20px, 5vw, 32px) 64px;
       }
 
       .lede {
@@ -145,15 +193,15 @@ const siteName = "AI八爪貓";
         max-width: 34em;
       }
 
-      .link-glow {
+      .text-link {
         color: var(--primary);
-        border-bottom: 1px solid transparent;
-        transition: color 160ms ease, border-color 160ms ease;
+        transition: color 160ms ease;
       }
 
-      .link-glow:hover {
-        color: var(--accent);
-        border-color: var(--accent);
+      .text-link:hover {
+        color: var(--primary-pressed);
+        text-decoration: underline;
+        text-underline-offset: 3px;
       }
 
       time {
@@ -162,33 +210,98 @@ const siteName = "AI八爪貓";
         color: var(--steel);
       }
 
+      .section-label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-family: var(--font-display);
+        font-size: 20px;
+        font-weight: 600;
+        margin: 0 0 24px;
+      }
+
+      .section-label::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        border: 1.5px solid var(--accent);
+        background: var(--primary-soft);
+        flex-shrink: 0;
+      }
+
+      .tag-chip {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: var(--primary);
+        background: var(--primary-soft);
+        border: 1px solid var(--primary-tint);
+        border-radius: 999px;
+        padding: 1px 9px;
+        white-space: nowrap;
+      }
+
       .site-footer {
+        border-top: 1px solid var(--hairline);
+      }
+
+      .site-footer-inner {
         max-width: var(--measure);
         margin: 0 auto;
-        padding: 32px clamp(20px, 5vw, 32px) 48px;
-        border-top: 1px solid var(--hairline);
+        padding: 28px clamp(20px, 5vw, 32px) 48px;
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+        font-size: 13px;
         color: var(--steel);
-        font-family: var(--font-mono);
-        font-size: 12px;
+      }
+
+      .site-footer-links {
+        display: flex;
+        gap: 16px;
+      }
+
+      .site-footer a {
+        color: var(--steel);
+      }
+
+      .site-footer a:hover {
+        color: var(--primary);
       }
     </style>
   </head>
   <body>
     <header class="site-header">
-      <a class="brand" href="/">
-        <span class="brand-node" aria-hidden="true"></span>
-        <span>{siteName}</span>
-      </a>
-      <nav class="site-nav">
-        <a href="/blog">文章</a>
-        <a href="/projects">作品</a>
-      </nav>
+      <div class="site-header-inner">
+        <a class="brand" href="/">
+          <svg viewBox="0 0 22 22" fill="none" aria-hidden="true">
+            <circle cx="11" cy="11" r="9.5" stroke="#1668b0" stroke-width="1.5"></circle>
+            <circle cx="11" cy="11" r="3" fill="#2ea3e6"></circle>
+            <path d="M11 1.5v4M11 16.5v4M1.5 11h4M16.5 11h4" stroke="#cfe6f8" stroke-width="1.5"></path>
+          </svg>
+          <span>{siteName}</span>
+        </a>
+        <nav class="site-nav">
+          <a href="/blog" class={isActive("/blog") ? "active" : ""}>文章</a>
+          <a href="/projects" class={isActive("/projects") ? "active" : ""}>作品</a>
+          <a href="/about" class={isActive("/about") ? "active" : ""}>關於</a>
+        </nav>
+      </div>
     </header>
     <main>
       <slot />
     </main>
+    <slot name="after-main" />
     <footer class="site-footer">
-      <span>{siteName}</span>
+      <div class="site-footer-inner">
+        <span>© 2026 {siteName}</span>
+        <span class="site-footer-links">
+          <a href={site.githubUrl}>GitHub</a>
+          {site.threadsUrl && <a href={site.threadsUrl}>Threads</a>}
+          <a href="/rss.xml">RSS</a>
+        </span>
+      </div>
     </footer>
   </body>
 </html>
