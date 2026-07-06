@@ -17,17 +17,43 @@ const allTags = [...new Set(posts.flatMap((post) => post.data.tags))].sort();
     font-size: clamp(28px, 4vw, 36px);
   }
 
+  .blog-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 280px;
+    gap: 0 72px;
+    align-items: start;
+  }
+
+  .list-col {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .filter-col {
+    grid-column: 2;
+    grid-row: 1;
+    position: sticky;
+    top: 40px;
+  }
+
   .toolbar {
     display: grid;
-    gap: 14px;
-    padding-bottom: 8px;
+    gap: 18px;
+  }
+
+  .filter-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--steel);
+    margin: 0 0 8px;
   }
 
   .search {
     font: inherit;
     font-size: 14px;
     width: 100%;
-    max-width: 360px;
     padding: 10px 12px;
     border: 1px solid var(--hairline-strong);
     border-radius: 8px;
@@ -134,6 +160,27 @@ const allTags = [...new Set(posts.flatMap((post) => post.data.tags))].sort();
     display: none;
   }
 
+  @media (max-width: 960px) {
+    .blog-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .list-col,
+    .filter-col {
+      grid-column: 1;
+      grid-row: auto;
+    }
+
+    .filter-col {
+      position: static;
+      padding-bottom: 20px;
+    }
+
+    .search {
+      max-width: 360px;
+    }
+  }
+
   @media (max-width: 560px) {
     .post-list li {
       grid-template-columns: 1fr;
@@ -152,47 +199,57 @@ const allTags = [...new Set(posts.flatMap((post) => post.data.tags))].sort();
     posts.length === 0 ? (
       <p class="empty">還沒有文章，敬請期待。</p>
     ) : (
-      <>
-        <div class="toolbar">
-          <input class="search" id="post-search" type="search" placeholder="搜尋文章標題…" />
-          {allTags.length > 0 && (
-            <div class="chips" id="tag-chips">
-              {allTags.map((tag) => (
-                <button class="filter-chip" type="button" data-tag={tag}>
-                  {tag}
-                </button>
-              ))}
+      <div class="blog-grid">
+        <aside class="filter-col">
+          <div class="toolbar">
+            <div>
+              <p class="filter-label">搜尋</p>
+              <input class="search" id="post-search" type="search" placeholder="搜尋文章標題…" />
             </div>
-          )}
-        </div>
-        <ul class="post-list" id="post-list">
-          {posts.map((post) => (
-            <li
-              class="post-item"
-              data-title={post.data.title}
-              data-tags={post.data.tags.join(",")}
-            >
-              <time datetime={post.data.pubDate.toISOString()}>
-                {post.data.pubDate.toISOString().slice(0, 10)}
-              </time>
+            {allTags.length > 0 && (
               <div>
-                <div class="post-title">
-                  <a href={`/blog/${post.id}/`}>{post.data.title}</a>
+                <p class="filter-label">標籤</p>
+                <div class="chips" id="tag-chips">
+                  {allTags.map((tag) => (
+                    <button class="filter-chip" type="button" data-tag={tag}>
+                      {tag}
+                    </button>
+                  ))}
                 </div>
-                <div class="post-desc">{post.data.description}</div>
-                {post.data.tags.length > 0 && (
-                  <div class="post-tags">
-                    {post.data.tags.map((tag) => (
-                      <span class="tag-chip">{tag}</span>
-                    ))}
-                  </div>
-                )}
               </div>
-            </li>
-          ))}
-        </ul>
-        <p class="no-match" id="no-match">沒有符合的文章。</p>
-      </>
+            )}
+          </div>
+        </aside>
+        <div class="list-col">
+          <ul class="post-list" id="post-list">
+            {posts.map((post) => (
+              <li
+                class="post-item"
+                data-title={post.data.title}
+                data-tags={post.data.tags.join(",")}
+              >
+                <time datetime={post.data.pubDate.toISOString()}>
+                  {post.data.pubDate.toISOString().slice(0, 10)}
+                </time>
+                <div>
+                  <div class="post-title">
+                    <a href={`/blog/${post.id}/`}>{post.data.title}</a>
+                  </div>
+                  <div class="post-desc">{post.data.description}</div>
+                  {post.data.tags.length > 0 && (
+                    <div class="post-tags">
+                      {post.data.tags.map((tag) => (
+                        <span class="tag-chip">{tag}</span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+          <p class="no-match" id="no-match">沒有符合的文章。</p>
+        </div>
+      </div>
     )
   }
 </BaseLayout>

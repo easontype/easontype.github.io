@@ -13,7 +13,12 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
+const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const others = (await getCollection("blog", ({ data }) => !data.draft))
+  .filter((p) => p.id !== post.id)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 5);
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const jsonLd = {
@@ -34,6 +39,133 @@ const jsonLd = {
 ---
 
 <style>
+  .post-grid {
+    display: grid;
+    grid-template-columns: minmax(170px, 220px) minmax(0, var(--measure)) minmax(170px, 220px);
+    gap: 40px;
+    justify-content: center;
+  }
+
+  .rail {
+    position: sticky;
+    top: 40px;
+    align-self: start;
+    padding-top: 64px;
+    font-size: 13px;
+  }
+
+  .rail-title {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--steel);
+    margin: 0 0 12px;
+  }
+
+  .toc ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 2px;
+    border-left: 1px solid var(--hairline);
+  }
+
+  .toc a {
+    display: block;
+    padding: 4px 0 4px 14px;
+    margin-left: -1px;
+    border-left: 2px solid transparent;
+    color: var(--slate);
+    line-height: 1.5;
+    transition:
+      color 120ms ease,
+      border-color 120ms ease;
+  }
+
+  .toc li.lv3 a {
+    padding-left: 28px;
+    font-size: 12px;
+  }
+
+  .toc a:hover {
+    color: var(--primary);
+  }
+
+  .toc a.active {
+    color: var(--primary);
+    font-weight: 600;
+    border-left-color: var(--accent);
+  }
+
+  .more ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 14px;
+  }
+
+  .more time {
+    display: block;
+    font-size: 11px;
+  }
+
+  .more a {
+    display: block;
+    color: var(--ink);
+    font-size: 13.5px;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+
+  .more a:hover {
+    color: var(--primary);
+  }
+
+  .all-link {
+    display: inline-block;
+    margin-top: 18px;
+    font-size: 13px;
+  }
+
+  .toc-mobile {
+    display: none;
+    margin: 16px 0 0;
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    background: var(--surface);
+    padding: 10px 16px;
+  }
+
+  .toc-mobile summary {
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .toc-mobile ul {
+    list-style: none;
+    margin: 0;
+    padding: 8px 0 4px;
+    display: grid;
+    gap: 6px;
+  }
+
+  .toc-mobile li.lv3 {
+    padding-left: 14px;
+  }
+
+  .toc-mobile a {
+    font-size: 14px;
+    color: var(--slate);
+  }
+
+  .toc-mobile a:hover {
+    color: var(--primary);
+  }
+
   .post-head {
     padding: 48px 0 8px;
   }
@@ -126,24 +258,117 @@ const jsonLd = {
     display: inline-block;
     margin-top: 40px;
   }
+
+  @media (max-width: 1200px) {
+    .post-grid {
+      grid-template-columns: minmax(0, var(--measure));
+    }
+
+    .rail {
+      display: none;
+    }
+
+    .toc-mobile {
+      display: block;
+    }
+  }
 </style>
 
 <BaseLayout title={post.data.title} description={post.data.description} ogType="article">
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-  <article>
-    <div class="post-head">
-      <div class="post-meta">
-        <time datetime={post.data.pubDate.toISOString()}>
-          {post.data.pubDate.toISOString().slice(0, 10)}
-        </time>
-        {post.data.tags.map((tag) => <span class="tag-chip">{tag}</span>)}
+  <div class="post-grid">
+    <aside class="rail">
+      {
+        toc.length > 0 && (
+          <nav class="toc" aria-label="目錄">
+            <p class="rail-title">目錄</p>
+            <ul>
+              {toc.map((h) => (
+                <li class={h.depth === 3 ? "lv3" : ""}>
+                  <a href={`#${h.slug}`}>{h.text}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )
+      }
+    </aside>
+    <article>
+      <div class="post-head">
+        <div class="post-meta">
+          <time datetime={post.data.pubDate.toISOString()}>
+            {post.data.pubDate.toISOString().slice(0, 10)}
+          </time>
+          {post.data.tags.map((tag) => <span class="tag-chip">{tag}</span>)}
+        </div>
+        <h1>{post.data.title}</h1>
       </div>
-      <h1>{post.data.title}</h1>
-    </div>
-    <div class="prose">
-      <Content />
-    </div>
-    <NewsletterCta variant="card" />
-    <a class="back text-link" href="/blog">← 回文章列表</a>
-  </article>
+      {
+        toc.length > 0 && (
+          <details class="toc-mobile">
+            <summary>目錄</summary>
+            <ul>
+              {toc.map((h) => (
+                <li class={h.depth === 3 ? "lv3" : ""}>
+                  <a href={`#${h.slug}`}>{h.text}</a>
+                </li>
+              ))}
+            </ul>
+          </details>
+        )
+      }
+      <div class="prose">
+        <Content />
+      </div>
+      <NewsletterCta variant="card" />
+      <a class="back text-link" href="/blog">← 回文章列表</a>
+    </article>
+    <aside class="rail">
+      {
+        others.length > 0 && (
+          <nav class="more" aria-label="更多文章">
+            <p class="rail-title">更多文章</p>
+            <ul>
+              {others.map((p) => (
+                <li>
+                  <time datetime={p.data.pubDate.toISOString()}>
+                    {p.data.pubDate.toISOString().slice(0, 10)}
+                  </time>
+                  <a href={`/blog/${p.id}/`}>{p.data.title}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )
+      }
+      <a class="text-link all-link" href="/blog">全部文章 →</a>
+    </aside>
+  </div>
 </BaseLayout>
+
+<script>
+  // TOC scroll-spy：捲動時把「最後一個越過視窗上緣 25% 線」的 heading 標成 active。
+  const tocLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>(".toc a"));
+  if (tocLinks.length > 0) {
+    const targets = tocLinks
+      .map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1))))
+      .filter((el): el is HTMLElement => el !== null);
+
+    const setActive = (id: string) => {
+      for (const a of tocLinks)
+        a.classList.toggle("active", decodeURIComponent(a.hash.slice(1)) === id);
+    };
+
+    const update = () => {
+      const line = window.innerHeight * 0.25;
+      let current = targets[0]?.id ?? "";
+      for (const t of targets) {
+        if (t.getBoundingClientRect().top <= line) current = t.id;
+      }
+      setActive(current);
+    };
+
+    document.addEventListener("scroll", update, { passive: true });
+    update();
+  }
+</script>
