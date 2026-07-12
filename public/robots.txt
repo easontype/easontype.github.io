@@ -23,4 +23,4 @@ Allow: /
 User-agent: CCBot
 Allow: /
 
-Sitemap: https://easontype.github.io/sitemap-index.xml
+Sitemap: https://aibazhaocat.com/sitemap-index.xml
