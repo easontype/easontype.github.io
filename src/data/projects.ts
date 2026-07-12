@@ -13,28 +13,14 @@ export const projects: Project[] = [
     href: "https://github.com/easontype/litereview",
   },
   {
-    name: "Council",
-    description: "學術 AI 討論／辯論框架與論文閱讀工具。",
-    featured: true,
-    href: "https://github.com/easontype/multi_agent_council",
-  },
-  {
     name: "Lingua A8",
     description: "全雙工語音學習 app。",
     featured: true,
     href: "https://github.com/easontype/loop-learning-agent",
   },
   {
-    name: "Social Drafts Dashboard",
-    description: "社群貼文草稿管理儀表板。",
-  },
-  {
     name: "OctaBrain",
     description: "社群智慧引擎：分析貼文、學習主理人口吻。",
-  },
-  {
-    name: "Sports Betting ML",
-    description: "運動賽事預測的機器學習專案。",
   },
   {
     name: "AI八爪貓 電子報",
