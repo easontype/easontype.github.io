@@ -1,0 +1,317 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import NewsletterCta from "../components/NewsletterCta.astro";
+import { resourceSections, certifications } from "../data/resources";
+
+const lastUpdated = "2026-06-14";
+const totalCourses = resourceSections.reduce((n, s) => n + s.resources.length, 0);
+---
+
+<style>
+  .page-head {
+    padding: 48px 0 8px;
+  }
+
+  .page-head h1 {
+    font-size: clamp(28px, 4vw, 36px);
+  }
+
+  .meta-line {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--steel);
+    margin: 8px 0 0;
+  }
+
+  .toolbar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin: 28px 0 8px;
+    padding: 16px 0;
+    border-top: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .search {
+    font: inherit;
+    font-size: 14px;
+    padding: 8px 12px;
+    border: 1px solid var(--hairline-strong);
+    border-radius: 8px;
+    color: var(--ink);
+    background: var(--canvas);
+    min-width: 220px;
+  }
+
+  .search:focus {
+    outline: 2px solid var(--primary-tint);
+    outline-offset: 0;
+    border-color: var(--primary);
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .filter-chip {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--slate);
+    background: var(--canvas);
+    border: 1px solid var(--hairline-strong);
+    border-radius: 999px;
+    padding: 4px 12px;
+    cursor: pointer;
+    transition: all 120ms ease;
+  }
+
+  .filter-chip:hover {
+    border-color: var(--primary-tint);
+    color: var(--primary);
+  }
+
+  .filter-chip.active {
+    color: var(--primary);
+    background: var(--primary-soft);
+    border-color: var(--primary-tint);
+  }
+
+  .resource-section {
+    margin-top: 44px;
+  }
+
+  .resource-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 16px;
+  }
+
+  .resource-card {
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: grid;
+    gap: 10px;
+    transition: border-color 160ms ease;
+  }
+
+  .resource-card:hover {
+    border-color: var(--primary-tint);
+  }
+
+  .resource-card h3 {
+    font-size: 16px;
+    margin: 0;
+  }
+
+  .resource-card h3 a {
+    color: var(--ink);
+  }
+
+  .resource-card h3 a:hover {
+    color: var(--primary);
+  }
+
+  .resource-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    font-size: 12px;
+  }
+
+  .badge {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--slate);
+    background: var(--canvas);
+    border: 1px solid var(--hairline-strong);
+    border-radius: 999px;
+    padding: 2px 9px;
+  }
+
+  .resource-content {
+    color: var(--slate);
+    font-size: 14px;
+    margin: 0;
+  }
+
+  .resource-audience {
+    color: var(--steel);
+    font-size: 13px;
+    margin: 0;
+  }
+
+  .resource-audience::before {
+    content: "適合：";
+    color: var(--steel);
+  }
+
+  .cert-groups {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 32px;
+  }
+
+  .cert-list {
+    list-style: none;
+    margin: 8px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+  }
+
+  .cert-list li a {
+    display: block;
+    padding: 10px 14px;
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    color: var(--ink);
+    font-size: 14px;
+  }
+
+  .cert-list li a:hover {
+    border-color: var(--primary-tint);
+    color: var(--primary);
+  }
+
+  .no-match {
+    display: none;
+    color: var(--steel);
+    font-style: italic;
+    padding: 24px 0;
+  }
+</style>
+
+<BaseLayout
+  title="免費資源"
+  description={`${totalCourses} 個免費／低成本 AI 學習資源整理：中英文課程、台灣本土與國際認證，含免費狀態、證書、預估時數、適合誰學。`}
+>
+  <div class="page-head">
+    <h1>AI 免費學習資源整理</h1>
+    <p class="lede">{totalCourses} 個中英文免費／低成本 AI 課程，加上台灣本土與國際認證清單。每個都標好免費狀態、有沒有證書、要花多少時間，自己抓需求挑。</p>
+    <p class="meta-line">最後更新：{lastUpdated}｜資料來源：Gemini、Claude 協助查詢，Perplexity 進行資料核實</p>
+  </div>
+
+  <div class="toolbar">
+    <input class="search" id="res-search" type="search" placeholder="搜尋課程名稱…" />
+    <div class="chips" id="lang-chips">
+      <button class="filter-chip active" type="button" data-lang="">全部</button>
+      <button class="filter-chip" type="button" data-lang="zh">中文</button>
+      <button class="filter-chip" type="button" data-lang="en">英文</button>
+    </div>
+    <div class="chips">
+      <button class="filter-chip" type="button" id="free-only-chip">✅ 只看完全免費</button>
+    </div>
+  </div>
+
+  {
+    resourceSections.map((section) => (
+      <section class="resource-section" data-lang-section={section.lang}>
+        <h2 class="section-label">{section.title}</h2>
+        <div class="resource-grid">
+          {section.resources.map((r) => (
+            <article
+              class="resource-card"
+              data-lang={section.lang}
+              data-title={r.title}
+              data-free-only={r.free?.startsWith("✅") ? "true" : "false"}
+            >
+              <h3>
+                <a href={r.href} target="_blank" rel="noopener">
+                  {r.title} ↗
+                </a>
+              </h3>
+              <div class="resource-badges">
+                {r.free && <span class="badge">💰 {r.free}</span>}
+                {r.certificate && <span class="badge">🏅 {r.certificate}</span>}
+                {r.hours && <span class="badge">⏱ {r.hours}</span>}
+              </div>
+              {r.content && <p class="resource-content">{r.content}</p>}
+              {r.audience && <p class="resource-audience">{r.audience}</p>}
+            </article>
+          ))}
+        </div>
+      </section>
+    ))
+  }
+
+  <p class="no-match" id="no-match">沒有符合的資源，換個關鍵字或篩選試試。</p>
+
+  <section class="resource-section">
+    <h2 class="section-label">認證清單</h2>
+    <p class="lede">求職用得上的官方認證，連結直達報名頁，細節與費用請以官網為準。</p>
+    <div class="cert-groups">
+      {
+        (["台灣本土認證", "國際認證"] as const).map((region) => (
+          <div>
+            <h3>{region}</h3>
+            <ul class="cert-list">
+              {certifications
+                .filter((c) => c.region === region)
+                .map((c) => (
+                  <li>
+                    <a href={c.href} target="_blank" rel="noopener">
+                      {c.title} ↗
+                    </a>
+                  </li>
+                ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <NewsletterCta variant="card" />
+</BaseLayout>
+
+<script>
+  const search = document.getElementById("res-search") as HTMLInputElement | null;
+  const langChips = Array.from(document.querySelectorAll<HTMLButtonElement>("#lang-chips .filter-chip"));
+  const freeChip = document.getElementById("free-only-chip") as HTMLButtonElement | null;
+  const cards = Array.from(document.querySelectorAll<HTMLElement>(".resource-card"));
+  const sections = Array.from(document.querySelectorAll<HTMLElement>(".resource-section[data-lang-section]"));
+  const noMatch = document.getElementById("no-match");
+  let activeLang = "";
+  let freeOnly = false;
+
+  function apply() {
+    const q = (search?.value ?? "").trim().toLowerCase();
+    let visible = 0;
+    for (const card of cards) {
+      const title = (card.dataset.title ?? "").toLowerCase();
+      const lang = card.dataset.lang ?? "";
+      const isFree = card.dataset.freeOnly === "true";
+      const matchQ = !q || title.includes(q);
+      const matchLang = !activeLang || lang === activeLang;
+      const matchFree = !freeOnly || isFree;
+      const show = matchQ && matchLang && matchFree;
+      card.style.display = show ? "" : "none";
+      if (show) visible += 1;
+    }
+    for (const section of sections) {
+      const lang = section.dataset.langSection ?? "";
+      section.style.display = !activeLang || lang === activeLang ? "" : "none";
+    }
+    if (noMatch) noMatch.style.display = visible === 0 ? "block" : "none";
+  }
+
+  search?.addEventListener("input", apply);
+  for (const chip of langChips) {
+    chip.addEventListener("click", () => {
+      activeLang = chip.dataset.lang ?? "";
+      for (const c of langChips) c.classList.toggle("active", c === chip);
+      apply();
+    });
+  }
+  freeChip?.addEventListener("click", () => {
+    freeOnly = !freeOnly;
+    freeChip.classList.toggle("active", freeOnly);
+    apply();
+  });
+</script>
