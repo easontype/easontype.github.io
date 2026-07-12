@@ -150,3 +150,6 @@ Llama 系列開源模型的微調與本地/雲端部署，Coursera 上有「Gene
 ---
 
 課程清單到這邊告一段落，接下來會另外整理一篇台灣本土與國際的 AI 認證清單。想收到更新可以訂閱下面的電子報。
+
+[AI 免費學習資源整理（上）](/blog/free-ai-learning-resources-part1/)
+
