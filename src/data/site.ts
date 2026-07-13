@@ -11,5 +11,5 @@ export const site = {
   portalyUrl: "https://portaly.cc/ai-bazhaocat",
   // GoatCounter 分析代碼（https://www.goatcounter.com 免費註冊後填 site code，如 "aibacat"）。
   // TODO(使用者): 註冊後填入；為 "" 時不載入任何追蹤。
-  goatcounterCode: "",
+  goatcounterCode: "aibazhaocat",
 };
