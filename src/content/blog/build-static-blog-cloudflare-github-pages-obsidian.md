@@ -38,29 +38,35 @@ Cloudflare 網域註冊入口：[Cloudflare Registrar](https://www.cloudflare.co
 
 ![Cloudflare 後台首頁](/images/blog/build-static-blog-cloudflare-github-pages-obsidian/01-dashboard-ready.png)
 
-2. **按「Create application」：** 進入 Workers & Pages 頁面後，右上角有個建立新專案的按鈕
+2. **到 Workers & Pages 頁面，按「Create application」：** 右上角有個建立新專案的按鈕
 
 ![Workers 與 Pages 頁面，Create application 按鈕](/images/blog/build-static-blog-cloudflare-github-pages-obsidian/02-create-application.png)
 
-3. **選「Select a template」再選 Astro Framework Starter：** Cloudflare 內建現成的 Astro 部落格範本，不用自己從零生框架
+3. **選「Select a template」：** 這一步會列出幾種建立方式（接 GitHub、接 GitLab、Hello World 空白專案、選範本、上傳靜態檔案），選範本最快
 
-![選擇範本畫面，Astro Framework Starter](/images/blog/build-static-blog-cloudflare-github-pages-obsidian/03-select-template-astro.png)
+![Ship something new 畫面，Select a template 選項](/images/blog/build-static-blog-cloudflare-github-pages-obsidian/03-ship-something-new.png)
 
-4. **選自己的 GitHub 帳號，確認專案名稱：** 這一步 Cloudflare 會問要接哪個 GitHub 帳號，專案名稱會變成之後網址的一部分
+4. **範本清單選「Astro Framework Starter」：** 清單裡其他範本是給不同用途的，不是拿來寫部落格的：
+   - **React Router Framework Starter：** 適合做需要前後端邏輯、互動性強的全端網頁應用程式
+   - **Vite React Template：** 給想自己刻 React 前端的人用，一樣偏應用程式而非部落格
+   - **Workflows Starter：** 示範 Cloudflare Workflows（背景任務、流程自動化）怎麼寫，跟架站無關
+   - **AI Agent Visibility：** 幫既有網站做「讓 AI 搜尋工具讀得懂」的優化範本，不是從零架站用的
 
-![設定應用程式畫面，選擇 GitHub 帳號](/images/blog/build-static-blog-cloudflare-github-pages-obsidian/04-setup-git-account.png)
+   Astro Framework Starter 才是官方標明「Build a personal website, blog, or portfolio with Astro」的部落格範本
 
-5. **等建置完成：** Cloudflare 自動跑安裝、建置、部署，全程不用自己動手
+![選擇範本畫面，Astro Framework Starter](/images/blog/build-static-blog-cloudflare-github-pages-obsidian/04-select-template-astro.png)
 
-![建置部署成功畫面](/images/blog/build-static-blog-cloudflare-github-pages-obsidian/05-build-deploy-success.png)
+5. **選自己的 GitHub 帳號，確認專案名稱：** 這一步 Cloudflare 會問要接哪個 GitHub 帳號，專案名稱會變成之後網址的一部分
 
-6. **GitHub 上會多一個新 repo：** Cloudflare 幫你把程式碼開好一個 public repo，之後把裡面示範文章換成自己寫的內容，`git commit` 加 `git push` 就會自動重新部署
+![設定應用程式畫面，選擇 GitHub 帳號](/images/blog/build-static-blog-cloudflare-github-pages-obsidian/05-setup-git-account.png)
 
-![Cloudflare 自動建立的 GitHub repo](/images/blog/build-static-blog-cloudflare-github-pages-obsidian/06-github-repo-created.png)
+6. **等建置完成，按右上角「Visit」：** Cloudflare 自動跑安裝、建置、部署，全程不用自己動手，跑完直接點 Visit 就能看到網站
 
-7. **回 Workers & Pages 總覽確認上線：** 部署完成的專案會列在這裡，點進去可以看到即時網址
+![建置部署成功畫面](/images/blog/build-static-blog-cloudflare-github-pages-obsidian/06-build-deploy-success.png)
 
-![Workers 與 Pages 總覽，新專案已上線](/images/blog/build-static-blog-cloudflare-github-pages-obsidian/07-workers-pages-overview.png)
+7. **到自己的 GitHub 把這個新 repo clone 下來：** Cloudflare 幫你把程式碼開好一個 public repo，clone 下來之後就能接著用 Obsidian 寫文章、`git commit` 加 `git push` 就會自動重新部署
+
+![Cloudflare 自動建立的 GitHub repo](/images/blog/build-static-blog-cloudflare-github-pages-obsidian/07-github-repo-created.png)
 
 這個方法我實際拿自己的文章換掉範本內容測過，`git push` 上去幾秒內網站就更新了，跟前面買網域＋GitHub Pages 那條路唯一的差別只有網址長短，內容管理、Obsidian 寫文章的方式完全一樣。
 
