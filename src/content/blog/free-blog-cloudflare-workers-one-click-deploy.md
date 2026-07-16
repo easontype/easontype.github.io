@@ -11,14 +11,14 @@ tags: ["建站教學", "AI學習"]
 
 免費版最後拿到的網址，是 Cloudflare 給的 `專案名稱.你的帳號.workers.dev`。如果不想用這個網址，GitHub Pages 開啟後本身就有一個 `使用者名稱.github.io` 可以用，兩個都不用申請、不用付費。想換成自己買的自訂網域，或想知道怎麼用 Obsidian 當寫文章的後台，這兩塊留到下一篇。
 
-## 1. 登入 Cloudflare 後台，點左側「Workers & Pages」
+## 1. 登入 Cloudflare 後台
 
 - **費用：** 全程免費，只需要一個 Cloudflare 帳號
 - **登入後：** 首頁預設是空的，左側選單找「Workers & Pages」點進去
 
 ![Cloudflare 後台首頁](/images/blog/free-blog-cloudflare-workers-one-click-deploy/01-dashboard-ready.png)
 
-## 2. 到 Workers & Pages 頁面，按「Create application」
+## 2. 點左側「Workers & Pages」，按「Create application」
 
 - **位置：** 頁面右上角
 - **作用：** 開始建立一個新的專案
